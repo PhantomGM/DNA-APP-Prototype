@@ -73,3 +73,20 @@ This is a frontend-only application that can be run by serving its files with a 
 *   **Styling**: Tailwind CSS
 *   **Graph Visualization**: `react-force-graph-2d`
 *   **Markdown Parsing**: `marked`
+
+---
+
+## **License**
+
+This project is licensed under the [Creative Commons Attribution-NonCommercial 4.0 International License](http://creativecommons.org/licenses/by-nc/4.0/).
+
+You are free to:
+- **Share** — copy and redistribute the material in any medium or format  
+- **Adapt** — remix, transform, and build upon the material  
+
+Under the following terms:
+- **Attribution** — You must give appropriate credit  
+- **NonCommercial** — You may not use the material for commercial purposes  
+
+> **Note:** As the copyright holder, I reserve the right to use this project for commercial purposes.  
+> See the `LICENSE` file for more details.
