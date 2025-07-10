@@ -1,4 +1,3 @@
-
 export { default as WorldDetailedForm } from './WorldDetailedForm';
 export { default as NpcDetailedForm } from './NpcDetailedForm';
 export { default as FactionDetailedForm } from './FactionDetailedForm';

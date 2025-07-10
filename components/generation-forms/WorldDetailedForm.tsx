@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { WorldFormData } from '../../types';
 import FormField from '../common/FormField';

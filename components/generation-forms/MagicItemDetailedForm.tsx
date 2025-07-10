@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { MagicItemFormData } from '../../types';
 import FormField from '../common/FormField';

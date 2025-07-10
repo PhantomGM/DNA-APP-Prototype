@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { NpcFormData } from '../../types';
 import FormField from '../common/FormField';
