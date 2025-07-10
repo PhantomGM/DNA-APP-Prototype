@@ -9,13 +9,8 @@ import { useProject } from '../contexts/ProjectContext';
 import { generateItem } from '../services/geminiService';
 import Button from './common/Button';
 import {
-    WorldDetailedForm,
-    NpcDetailedForm,
-    FactionDetailedForm,
-    QuestDetailedForm,
-    SettlementDetailedForm,
-    MagicItemDetailedForm,
-    TravelDetailedForm
+    DetailedForm,
+    formConfigs,
 } from './generation-forms';
 
 interface GenerationFormProps {
@@ -89,17 +84,16 @@ const GenerationForm: React.FC<GenerationFormProps> = ({ type, onGenerate, setIs
     };
 
     const renderDetailedForm = () => {
-        const formProps = { formData, onChange: handleFormChange };
-        switch (type) {
-            case ContentType.World: return <WorldDetailedForm {...formProps} />;
-            case ContentType.NPC: return <NpcDetailedForm {...formProps} />;
-            case ContentType.Faction: return <FactionDetailedForm {...formProps} />;
-            case ContentType.Quest: return <QuestDetailedForm {...formProps} />;
-            case ContentType.Settlement: return <SettlementDetailedForm {...formProps} />;
-            case ContentType.MagicItem: return <MagicItemDetailedForm {...formProps} />;
-            case ContentType.Travel: return <TravelDetailedForm {...formProps} />;
-            default: return <p>No detailed form available for this type.</p>;
-        }
+        const config = formConfigs[type];
+        if (!config) return <p>No detailed form available for this type.</p>;
+        return (
+            <DetailedForm
+                descriptors={config.fields}
+                formData={formData}
+                onChange={handleFormChange}
+                useGrid={config.useGrid}
+            />
+        );
     };
 
     return (
