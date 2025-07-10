@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { ContentItem, ContentType } from '../types';
+import { getAllItems } from '../src/utils/projectHelpers';
 import { useProject } from '../contexts/ProjectContext';
 import Button from './common/Button';
 import InteractiveContentRenderer from './InteractiveContentRenderer';
@@ -24,16 +25,7 @@ const GraphNodeModal: React.FC<GraphNodeModalProps> = ({ item, onClose }) => {
     const [selectedLinkTarget, setSelectedLinkTarget] = useState('');
 
     const allItems = useMemo(() => {
-        if (!project) return [];
-        return [
-            ...project.worlds.map(i => ({ ...i, type: ContentType.World })),
-            ...project.npcs.map(i => ({ ...i, type: ContentType.NPC })),
-            ...project.factions.map(i => ({ ...i, type: ContentType.Faction })),
-            ...project.quests.map(i => ({ ...i, type: ContentType.Quest })),
-            ...project.settlements.map(i => ({ ...i, type: ContentType.Settlement })),
-            ...project.magicItems.map(i => ({ ...i, type: ContentType.MagicItem })),
-            ...project.travels.map(i => ({ ...i, type: ContentType.Travel })),
-        ].filter(i => i.id !== item.id); // Exclude self from linkable items
+        return project ? getAllItems(project).filter(i => i.id !== item.id) : [];
     }, [project, item.id]);
 
     const currentLinks = useMemo(() => {
