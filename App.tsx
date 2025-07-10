@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useRef } from 'react';
 import { Project, ContentType, ContentItem, World, Settlement, MagicItem, Travel, NPC, Faction, Quest, Link } from './types';
 import { ProjectProvider } from './contexts/ProjectContext';

@@ -1,4 +1,3 @@
-
 import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
 import { World, Faction, NPC, Quest, Settlement, MagicItem, ContentType, GenerationMethod, Travel, ContentItem } from '../types';
 import { randInt } from './utils';

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ContentType, GenerationMethod, ContentItem } from '../types';
 import { useProject } from '../contexts/ProjectContext';

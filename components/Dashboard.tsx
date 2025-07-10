@@ -1,4 +1,3 @@
-
 import React, { useMemo, useCallback } from 'react';
 import ForceGraph2D from 'react-force-graph-2d';
 import { useProject } from '../contexts/ProjectContext';

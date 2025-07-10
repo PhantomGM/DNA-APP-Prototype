@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 const FolderPlusIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (

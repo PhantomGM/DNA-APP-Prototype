@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { QuestFormData } from '../../types';
 import FormField from '../common/FormField';

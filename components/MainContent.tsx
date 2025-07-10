@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Project, ContentType, ContentItem, GenerationMethod, World } from '../types';
 import WelcomeScreen from './WelcomeScreen';
