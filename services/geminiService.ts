@@ -24,6 +24,9 @@ import { TRAVEL_DNA_DECODING_PROMPT } from './prompts/travelPrompt';
 
 const API_KEY = process.env.API_KEY;
 
+// When building for production we want to avoid noisy console output.
+export const DEBUG = process.env.NODE_ENV !== 'production';
+
 if (!API_KEY) {
     console.error("API_KEY environment variable not set.");
 }
@@ -35,8 +38,10 @@ const generateGeminiContent = async (prompt: string): Promise<string> => {
         throw new Error("API_KEY is not configured. Please set the environment variable.");
     }
     try {
-        console.groupCollapsed('--- GEMINI API CALL ---');
-        console.log('SENDING PROMPT:', prompt);
+        if (DEBUG) {
+            console.groupCollapsed('--- GEMINI API CALL ---');
+            console.log('SENDING PROMPT:', prompt);
+        }
 
         const response: GenerateContentResponse = await ai.models.generateContent({
             model: "gemini-2.5-flash",
@@ -47,10 +52,14 @@ const generateGeminiContent = async (prompt: string): Promise<string> => {
             },
         });
         
-        console.log('RECEIVED RAW RESPONSE:', JSON.stringify(response, null, 2));
+        if (DEBUG) {
+            console.log('RECEIVED RAW RESPONSE:', JSON.stringify(response, null, 2));
+        }
         const text = response.text;
-        console.log('EXTRACTED .text PROPERTY:', text);
-        console.groupEnd();
+        if (DEBUG) {
+            console.log('EXTRACTED .text PROPERTY:', text);
+            console.groupEnd();
+        }
 
         if (!text || typeof text !== 'string') {
             const safetyRatings = response.candidates?.[0]?.safetyRatings;
@@ -63,9 +72,13 @@ const generateGeminiContent = async (prompt: string): Promise<string> => {
         }
         return text;
     } catch (error) {
-        console.groupCollapsed('--- GEMINI API ERROR ---');
+        if (DEBUG) {
+            console.groupCollapsed('--- GEMINI API ERROR ---');
+        }
         console.error("Error calling Gemini API:", error);
-        console.groupEnd();
+        if (DEBUG) {
+            console.groupEnd();
+        }
          if (error instanceof Error) {
             throw new Error(`Failed to communicate with the Gemini API: ${error.message}`);
         }
@@ -74,21 +87,27 @@ const generateGeminiContent = async (prompt: string): Promise<string> => {
 };
 
 const extractName = (text: string, patterns: RegExp[], defaultName: string): string => {
-    console.groupCollapsed(`--- EXTRACT NAME (${defaultName}) ---`);
-    console.log(`INPUT TYPE: ${typeof text}`);
-    console.log('INPUT VALUE:', text);
+    if (DEBUG) {
+        console.groupCollapsed(`--- EXTRACT NAME (${defaultName}) ---`);
+        console.log(`INPUT TYPE: ${typeof text}`);
+        console.log('INPUT VALUE:', text);
+    }
 
     // Defensively check for non-string types first to prevent errors on the next check.
     if (typeof text !== 'string') {
         console.warn(`extractName received non-string input. Defaulting to "${defaultName}".`);
-        console.groupEnd();
+        if (DEBUG) {
+            console.groupEnd();
+        }
         return defaultName;
     }
     
     // Now that we know it's a string, we can safely check if it's falsy (empty string) or just whitespace.
     if (!text.trim()) {
         console.warn(`extractName received an empty or whitespace-only string. Defaulting to "${defaultName}".`);
-        console.groupEnd();
+        if (DEBUG) {
+            console.groupEnd();
+        }
         return defaultName;
     }
 
@@ -99,8 +118,10 @@ const extractName = (text: string, patterns: RegExp[], defaultName: string): str
             const potentialName = match[1].trim();
             if (potentialName) {
                 const finalName = potentialName.replace(/[*_]/g, '').replace(/^"|"$/g, '');
-                console.log(`SUCCESS: Found name "${finalName}" with pattern: ${pattern}`);
-                console.groupEnd();
+                if (DEBUG) {
+                    console.log(`SUCCESS: Found name "${finalName}" with pattern: ${pattern}`);
+                    console.groupEnd();
+                }
                 return finalName;
             }
         }
@@ -112,15 +133,19 @@ const extractName = (text: string, patterns: RegExp[], defaultName: string): str
         if (trimmedLine) {
             const cleanedLine = trimmedLine.replace(/^###?\s*|^[\d.]+\s*|[*_]/g, '').trim();
             if (cleanedLine) {
-                console.log(`SUCCESS: Found name "${cleanedLine}" by line parsing.`);
-                console.groupEnd();
+                if (DEBUG) {
+                    console.log(`SUCCESS: Found name "${cleanedLine}" by line parsing.`);
+                    console.groupEnd();
+                }
                 return cleanedLine;
             }
         }
     }
     
     console.warn(`FAILURE: extractName did not find a name. Defaulting to "${defaultName}". Raw text:`, text);
-    console.groupEnd();
+    if (DEBUG) {
+        console.groupEnd();
+    }
     return defaultName;
 };
 
