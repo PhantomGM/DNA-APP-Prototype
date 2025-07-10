@@ -1,17 +1,16 @@
-
 import React, { useState } from 'react';
-import { ContentType, GenerationMethod, ContentItem } from '../types';
+import {
+    ContentType,
+    GenerationMethod,
+    ContentItem,
+    DetailedFormData,
+} from '../types';
 import { useProject } from '../contexts/ProjectContext';
 import { generateItem } from '../services/geminiService';
 import Button from './common/Button';
 import {
-    WorldDetailedForm,
-    NpcDetailedForm,
-    FactionDetailedForm,
-    QuestDetailedForm,
-    SettlementDetailedForm,
-    MagicItemDetailedForm,
-    TravelDetailedForm
+    DetailedForm,
+    formConfigs,
 } from './generation-forms';
 
 interface GenerationFormProps {
@@ -26,11 +25,16 @@ const GenerationForm: React.FC<GenerationFormProps> = ({ type, onGenerate, setIs
     const { project } = useProject();
     const [method, setMethod] = useState<GenerationMethod>(generationContext ? GenerationMethod.Guided : GenerationMethod.Random);
     const [guidance, setGuidance] = useState(generationContext?.guidance || '');
-    const [formData, setFormData] = useState<any>({});
+    const [formData, setFormData] = useState<DetailedFormData>({});
 
-    const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const handleFormChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    ) => {
         const { name, value } = e.target;
-        setFormData((prev: any) => ({ ...prev, [name]: value }));
+        setFormData((prev) => ({
+            ...prev,
+            [name as keyof DetailedFormData]: value,
+        }));
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -80,17 +84,16 @@ const GenerationForm: React.FC<GenerationFormProps> = ({ type, onGenerate, setIs
     };
 
     const renderDetailedForm = () => {
-        const formProps = { formData, onChange: handleFormChange };
-        switch (type) {
-            case ContentType.World: return <WorldDetailedForm {...formProps} />;
-            case ContentType.NPC: return <NpcDetailedForm {...formProps} />;
-            case ContentType.Faction: return <FactionDetailedForm {...formProps} />;
-            case ContentType.Quest: return <QuestDetailedForm {...formProps} />;
-            case ContentType.Settlement: return <SettlementDetailedForm {...formProps} />;
-            case ContentType.MagicItem: return <MagicItemDetailedForm {...formProps} />;
-            case ContentType.Travel: return <TravelDetailedForm {...formProps} />;
-            default: return <p>No detailed form available for this type.</p>;
-        }
+        const config = formConfigs[type];
+        if (!config) return <p>No detailed form available for this type.</p>;
+        return (
+            <DetailedForm
+                descriptors={config.fields}
+                formData={formData}
+                onChange={handleFormChange}
+                useGrid={config.useGrid}
+            />
+        );
     };
 
     return (

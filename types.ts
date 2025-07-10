@@ -1,4 +1,3 @@
-
 export interface World {
     id: string;
     name: string;
@@ -180,3 +179,14 @@ export interface TravelFormData {
     preference?: string;
     extraContext?: string;
 }
+
+// A union of all detailed form fields used for generation
+export type DetailedFormData = Partial<
+    WorldFormData &
+    NpcFormData &
+    FactionFormData &
+    QuestFormData &
+    SettlementFormData &
+    MagicItemFormData &
+    TravelFormData
+>;

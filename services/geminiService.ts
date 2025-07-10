@@ -1,4 +1,3 @@
-
 import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
 import { World, Faction, NPC, Quest, Settlement, MagicItem, ContentType, GenerationMethod, Travel, ContentItem } from '../types';
 import { randInt } from './utils';
@@ -35,8 +34,6 @@ const generateGeminiContent = async (prompt: string): Promise<string> => {
         throw new Error("GEMINI_API_KEY is not configured. Please set the environment variable.");
     }
     try {
-        console.groupCollapsed('--- GEMINI API CALL ---');
-        console.log('SENDING PROMPT:', prompt);
 
         const response: GenerateContentResponse = await ai.models.generateContent({
             model: "gemini-2.5-flash",
@@ -47,10 +44,7 @@ const generateGeminiContent = async (prompt: string): Promise<string> => {
             },
         });
         
-        console.log('RECEIVED RAW RESPONSE:', JSON.stringify(response, null, 2));
         const text = response.text;
-        console.log('EXTRACTED .text PROPERTY:', text);
-        console.groupEnd();
 
         if (!text || typeof text !== 'string') {
             const safetyRatings = response.candidates?.[0]?.safetyRatings;
@@ -63,9 +57,7 @@ const generateGeminiContent = async (prompt: string): Promise<string> => {
         }
         return text;
     } catch (error) {
-        console.groupCollapsed('--- GEMINI API ERROR ---');
         console.error("Error calling Gemini API:", error);
-        console.groupEnd();
          if (error instanceof Error) {
             throw new Error(`Failed to communicate with the Gemini API: ${error.message}`);
         }
@@ -74,21 +66,19 @@ const generateGeminiContent = async (prompt: string): Promise<string> => {
 };
 
 const extractName = (text: string, patterns: RegExp[], defaultName: string): string => {
-    console.groupCollapsed(`--- EXTRACT NAME (${defaultName}) ---`);
-    console.log(`INPUT TYPE: ${typeof text}`);
-    console.log('INPUT VALUE:', text);
+    if (DEBUG) {
+        console.log(`extractName input (${defaultName}):`, text);
+    }
 
     // Defensively check for non-string types first to prevent errors on the next check.
     if (typeof text !== 'string') {
         console.warn(`extractName received non-string input. Defaulting to "${defaultName}".`);
-        console.groupEnd();
         return defaultName;
     }
     
     // Now that we know it's a string, we can safely check if it's falsy (empty string) or just whitespace.
     if (!text.trim()) {
         console.warn(`extractName received an empty or whitespace-only string. Defaulting to "${defaultName}".`);
-        console.groupEnd();
         return defaultName;
     }
 
@@ -99,8 +89,9 @@ const extractName = (text: string, patterns: RegExp[], defaultName: string): str
             const potentialName = match[1].trim();
             if (potentialName) {
                 const finalName = potentialName.replace(/[*_]/g, '').replace(/^"|"$/g, '');
-                console.log(`SUCCESS: Found name "${finalName}" with pattern: ${pattern}`);
-                console.groupEnd();
+                if (DEBUG) {
+                    console.log(`SUCCESS: Found name "${finalName}" with pattern: ${pattern}`);
+                }
                 return finalName;
             }
         }
@@ -112,15 +103,15 @@ const extractName = (text: string, patterns: RegExp[], defaultName: string): str
         if (trimmedLine) {
             const cleanedLine = trimmedLine.replace(/^###?\s*|^[\d.]+\s*|[*_]/g, '').trim();
             if (cleanedLine) {
-                console.log(`SUCCESS: Found name "${cleanedLine}" by line parsing.`);
-                console.groupEnd();
+                if (DEBUG) {
+                    console.log(`SUCCESS: Found name "${cleanedLine}" by line parsing.`);
+                }
                 return cleanedLine;
             }
         }
     }
     
     console.warn(`FAILURE: extractName did not find a name. Defaulting to "${defaultName}". Raw text:`, text);
-    console.groupEnd();
     return defaultName;
 };
 

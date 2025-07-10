@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext } from 'react';
 import { Project, ContentItem, ContentType } from '../types';
 

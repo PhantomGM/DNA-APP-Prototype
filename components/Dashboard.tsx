@@ -1,8 +1,8 @@
-
 import React, { useMemo, useCallback } from 'react';
 import ForceGraph2D from 'react-force-graph-2d';
 import { useProject } from '../contexts/ProjectContext';
 import { ContentType, ContentItem } from '../types';
+import { getAllItems } from '../src/utils/projectHelpers';
 import GraphNodeModal from './GraphNodeModal';
 import Button from './common/Button';
 import SparklesIcon from './icons/SparklesIcon';
@@ -11,16 +11,7 @@ const Dashboard: React.FC = () => {
     const { project, viewItem, itemForModal, setItemForModal, startGeneration } = useProject();
 
     const allItems = useMemo(() => {
-        if (!project) return [];
-        return [
-            ...project.worlds.map(item => ({ ...item, type: ContentType.World })),
-            ...project.npcs.map(item => ({ ...item, type: ContentType.NPC })),
-            ...project.factions.map(item => ({ ...item, type: ContentType.Faction })),
-            ...project.quests.map(item => ({ ...item, type: ContentType.Quest })),
-            ...project.settlements.map(item => ({ ...item, type: ContentType.Settlement })),
-            ...project.magicItems.map(item => ({ ...item, type: ContentType.MagicItem })),
-            ...project.travels.map(item => ({ ...item, type: ContentType.Travel })),
-        ];
+        return project ? getAllItems(project) : [];
     }, [project]);
 
     const graphData = useMemo(() => {

@@ -1,8 +1,3 @@
-
-export { default as WorldDetailedForm } from './WorldDetailedForm';
-export { default as NpcDetailedForm } from './NpcDetailedForm';
-export { default as FactionDetailedForm } from './FactionDetailedForm';
-export { default as QuestDetailedForm } from './QuestDetailedForm';
-export { default as SettlementDetailedForm } from './SettlementDetailedForm';
-export { default as MagicItemDetailedForm } from './MagicItemDetailedForm';
-export { default as TravelDetailedForm } from './TravelDetailedForm';
+export { default as DetailedForm } from './DetailedForm';
+export { formConfigs } from './formConfigs';
+export type { FieldDescriptor, FormConfig } from './formConfigs';

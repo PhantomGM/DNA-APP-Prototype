@@ -26,7 +26,7 @@ A powerful, intuitive tool for TTRPG Game Masters to generate unique, structured
 
 This is a frontend-only application that can be run by serving its files with a local web server.
 
-1.  Clone or download the project files.
+1.  Clone or download the project files.y
 2.  Ensure the `GEMINI_API_KEY` environment variable is set in the terminal session you will use to launch the server. The application code expects this to be available at runtime.
 3.  From the project's root directory, start a simple local web server (e.g., `python -m http.server` or `npx serve`).
 4.  Open the local server's URL in your browser (e.g., `http://localhost:8000`).
