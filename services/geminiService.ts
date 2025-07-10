@@ -22,17 +22,17 @@ import { MAGIC_ITEM_DNA_DECODING_PROMPT } from './prompts/magicItemPrompt';
 import { TRAVEL_DNA_DECODING_PROMPT } from './prompts/travelPrompt';
 
 
-const API_KEY = process.env.API_KEY;
+const API_KEY = process.env.GEMINI_API_KEY;
 
 if (!API_KEY) {
-    console.error("API_KEY environment variable not set.");
+    console.error("GEMINI_API_KEY environment variable not set.");
 }
 
 const ai = new GoogleGenAI({ apiKey: API_KEY! });
 
 const generateGeminiContent = async (prompt: string): Promise<string> => {
     if (!API_KEY) {
-        throw new Error("API_KEY is not configured. Please set the environment variable.");
+        throw new Error("GEMINI_API_KEY is not configured. Please set the environment variable.");
     }
     try {
         console.groupCollapsed('--- GEMINI API CALL ---');

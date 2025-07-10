@@ -20,14 +20,14 @@ A powerful, intuitive tool for TTRPG Game Masters to generate unique, structured
 ### Prerequisites
 
 *   A modern web browser that supports ES6 modules and `importmap`.
-*   An API key for the Google Gemini API. This key must be available as an environment variable named `API_KEY` in the execution environment. The application is designed to read this key directly from the environment.
+*   An API key for the Google Gemini API. This key must be available as an environment variable named `GEMINI_API_KEY` in the execution environment. The application is designed to read this key directly from the environment.
 
 ### Running the Application
 
 This is a frontend-only application that can be run by serving its files with a local web server.
 
 1.  Clone or download the project files.
-2.  Ensure the `API_KEY` environment variable is set in the terminal session you will use to launch the server. The application code expects this to be available at runtime.
+2.  Ensure the `GEMINI_API_KEY` environment variable is set in the terminal session you will use to launch the server. The application code expects this to be available at runtime.
 3.  From the project's root directory, start a simple local web server (e.g., `python -m http.server` or `npx serve`).
 4.  Open the local server's URL in your browser (e.g., `http://localhost:8000`).
 
