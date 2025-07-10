@@ -1,6 +1,11 @@
 
 import React, { useState } from 'react';
-import { ContentType, GenerationMethod, ContentItem } from '../types';
+import {
+    ContentType,
+    GenerationMethod,
+    ContentItem,
+    DetailedFormData,
+} from '../types';
 import { useProject } from '../contexts/ProjectContext';
 import { generateItem } from '../services/geminiService';
 import Button from './common/Button';
@@ -26,11 +31,16 @@ const GenerationForm: React.FC<GenerationFormProps> = ({ type, onGenerate, setIs
     const { project } = useProject();
     const [method, setMethod] = useState<GenerationMethod>(generationContext ? GenerationMethod.Guided : GenerationMethod.Random);
     const [guidance, setGuidance] = useState(generationContext?.guidance || '');
-    const [formData, setFormData] = useState<any>({});
+    const [formData, setFormData] = useState<DetailedFormData>({});
 
-    const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const handleFormChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    ) => {
         const { name, value } = e.target;
-        setFormData((prev: any) => ({ ...prev, [name]: value }));
+        setFormData((prev) => ({
+            ...prev,
+            [name as keyof DetailedFormData]: value,
+        }));
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
